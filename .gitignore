@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+.venv/
+__pycache__/
+data/raw/
+# private research about the employer, not for the public repo
+research_notes/
+reports/
