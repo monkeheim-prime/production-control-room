@@ -211,7 +211,16 @@ table.data tbody tr:hover td { background: var(--panel-2); }
 }
 
 @media (max-width: 720px) {
-  .topbar { padding: 8px 16px; }
+  .topbar { padding: 8px 16px; position: static; gap: 8px; }
+  .brand { width: 100%; }
+  .stages { flex-wrap: nowrap; overflow-x: auto; width: calc(100% + 32px); margin: 0 -16px; padding: 0 16px 2px; scrollbar-width: none; }
+  .stages a { white-space: nowrap; flex: none; }
+  .topbar .spacer { display: none; }
+  .topbar .btn { min-height: 34px; padding: 6px 10px; }
+  .cols.chart-first > .center { order: -1; }
+  .schematic svg { max-width: 300px; margin: 0 auto; display: block; }
+  .banner { padding: 6px 16px; }
+  .statusbar { padding: 6px 16px; }
   .rail, .rail.right { max-width: none; border: 0; border-bottom: 1px solid var(--line); }
   .center { padding: 12px 16px; }
 }

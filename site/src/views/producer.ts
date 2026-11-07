@@ -439,7 +439,7 @@ function schematic(w: Well, dx: Diagnosis) {
   const barriers = c.barriers?.length
     ? c.barriers.map(b => h('div', { class: 'small' }, h('span', { class: b.status === 'ok' ? 'muted' : 'warn' }, b.status === 'ok' ? '● ' : '▲ '), `${b.name} — ${b.status === 'ok' ? 'OK' : 'attention'}`))
     : [h('div', { class: 'small muted' }, 'Barrier status not in public data.')]
-  return h('div', { style: { display: 'flex', flexDirection: 'column', gap: '10px' } },
+  return h('div', { class: 'schematic', style: { display: 'flex', flexDirection: 'column', gap: '10px' } },
     h('div', { style: { display: 'flex', justifyContent: 'space-between' } }, h('span', { class: 'eyebrow' }, 'Completion schematic'), h('span', { class: 'badge' }, 'ILLUSTRATIVE')),
     svg.node()!,
     h('div', { class: 'small muted' }, waterHyp

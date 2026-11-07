@@ -86,8 +86,9 @@ function hallChart(box: HTMLElement, hall: HallResult, u: Ctx['u']) {
       const x0 = xs(u.cum(pts[hall.onset].wi))
       g.append('line').attr('x1', x0).attr('x2', x0).attr('y1', 0).attr('y2', H).attr('stroke', 'var(--warn)').attr('stroke-dasharray', '3 4').attr('opacity', 0)
         .transition().delay(dur(1600)).attr('opacity', 1)
+      const short = W < 600
       g.append('text').attr('class', 'lbl-mono').attr('x', x0 + 6).attr('y', 14).attr('fill', 'var(--warn)').attr('opacity', 0)
-        .text(hall.verdict === 'fracture' ? 'DERIVATIVE BELOW → FRACTURE / THIEF ZONE' : hall.verdict === 'plugging' ? 'DERIVATIVE ABOVE → PLUGGING' : 'MINOR SEPARATION')
+        .text(hall.verdict === 'fracture' ? (short ? 'BELOW → FRACTURE' : 'DERIVATIVE BELOW → FRACTURE / THIEF ZONE') : hall.verdict === 'plugging' ? (short ? 'ABOVE → PLUGGING' : 'DERIVATIVE ABOVE → PLUGGING') : 'MINOR SEPARATION')
         .transition().delay(dur(1700)).attr('opacity', 1)
     }
     const hiP = g.append('path').datum(pts).attr('fill', 'none').attr('stroke', 'var(--ink)').attr('stroke-width', 2)

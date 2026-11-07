@@ -162,9 +162,12 @@ function funnel(box: HTMLElement, ds: Dataset, opps: Opportunity[], st: Map<stri
       .on('pointermove', (ev, c) => tip(tipRows(c.label, [['Count', String(c.n)], ['P50 oil', c.gain == null ? '—' : `${fmt(u.liq(c.gain))} ${u.liqU}`]]), ev)).on('pointerleave', () => tip(null))
       .transition().delay((_, i) => dur(i * 150)).duration(dur(500)).attr('y', c => mid - hs(c.n) / 2).attr('height', c => hs(c.n))
     g.selectAll('text.n').data(cols).join('text').attr('class', 'lbl-mono n').attr('x', c => xs(c.label)! + bw / 2).attr('y', c => mid - hs(c.n) / 2 - 6).attr('text-anchor', 'middle').text(c => c.n)
-    g.selectAll('text.l').data(cols).join('text').attr('class', 'lbl l').attr('x', c => xs(c.label)! + bw / 2).attr('y', H + 16).attr('text-anchor', 'middle').text(c => c.label)
+    const narrow = W < 600
+    const SHORT: Record<string, string> = { 'Wells reviewed': 'Reviewed', 'With an issue': 'Issues', 'Opportunities': 'Opps', 'Evaluated': 'Evaluated', 'Approved': 'Approved', 'Executed': 'Executed' }
+    g.selectAll('text.l').data(cols).join('text').attr('class', 'lbl l').attr('x', c => xs(c.label)! + bw / 2).attr('y', H + 16).attr('text-anchor', 'middle').style('font-size', () => (narrow ? '10px' : null)).text(c => (narrow ? SHORT[c.label] : c.label))
     g.selectAll('text.g').data(cols).join('text').attr('class', 'lbl g').attr('x', c => xs(c.label)! + bw / 2).attr('y', H + 30).attr('text-anchor', 'middle')
-      .text(c => (c.gain == null ? '' : `${fmt(u.liq(c.gain))} ${u.liqU}`))
+      .style('font-size', () => (narrow ? '9px' : null))
+      .text(c => (c.gain == null ? '' : narrow ? fmt(u.liq(c.gain)) : `${fmt(u.liq(c.gain))} ${u.liqU}`))
     if (reduced()) return
     // particles travel from column to column; fewer survive each gate
     const parts = d3.range(60).map(i => ({ i, seed: (i * 0.6180339) % 1, lane: ((i * 0.7548) % 1) - 0.5 }))

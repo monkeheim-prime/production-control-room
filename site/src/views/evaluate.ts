@@ -72,8 +72,9 @@ export function mountEvaluate(el: HTMLElement, { ds, u }: Ctx) {
     steps.push({ label: 'Risked potential', y0: 0, y1: today + risked, color: 'var(--ink-2)', kind: 'total' })
     const xs = d3.scaleBand<string>().domain(steps.map(s => s.label)).range([0, W]).padding(0.3)
     const ys = d3.scaleLinear().domain([0, u.liq(today + unrisk) * 1.08]).range([H, 0]).nice()
+    const SHORT: Record<string, string> = { 'Today': 'Now', '− risk': '−Risk', 'Risked potential': 'Risked', [`+ ${CAT_LABEL.water}`]: '+Water', [`+ ${CAT_LABEL.stim}`]: '+Stim', [`+ ${CAT_LABEL.lift}`]: '+Lift', [`+ ${CAT_LABEL.mech}`]: '+Mech' }
     g.append('g').call(d3.axisLeft(ys).ticks(4, '~s')).call(axisStyle)
-    g.append('g').attr('transform', `translate(0,${H})`).call(d3.axisBottom(xs)).call(axisStyle).selectAll('text').style('font-family', 'var(--sans)').style('font-size', '11px')
+    g.append('g').attr('transform', `translate(0,${H})`).call(d3.axisBottom(xs).tickFormat(d => (W < 600 ? SHORT[d] ?? d : d))).call(axisStyle).selectAll('text').style('font-family', 'var(--sans)').style('font-size', '11px')
     g.append('text').attr('class', 'lbl').attr('x', 0).attr('y', -6).text(`oil ${u.liqU}`)
     const bars = g.selectAll('rect.wf').data(steps).join('rect').attr('class', 'wf').attr('x', s => xs(s.label)!).attr('width', xs.bandwidth())
       .attr('y', s => ys(u.liq(Math.max(s.y0, s.y1)))).attr('height', 0)
@@ -82,6 +83,7 @@ export function mountEvaluate(el: HTMLElement, { ds, u }: Ctx) {
       .attr('height', s => Math.max(1, Math.abs(ys(u.liq(s.y0)) - ys(u.liq(s.y1)))))
     g.selectAll('text.v').data(steps).join('text').attr('class', 'lbl-mono v').attr('text-anchor', 'middle')
       .attr('x', s => xs(s.label)! + xs.bandwidth() / 2).attr('y', s => ys(u.liq(Math.max(s.y0, s.y1))) - 5).attr('opacity', 0)
+      .style('font-size', () => (W < 600 ? '9px' : null))
       .text(s => (s.kind === 'total' ? fmt(u.liq(s.y1)) : `${s.y1 >= s.y0 ? '+' : '−'}${fmt(u.liq(Math.abs(s.y1 - s.y0)))}`))
       .transition().delay((_, i) => dur(i * 260 + 300)).attr('opacity', 1)
   }

@@ -32,7 +32,7 @@ export function mountScreen(el: HTMLElement, { ds, u }: Ctx) {
   const rail = h('aside', { class: 'rail', 'aria-label': 'Filters' })
   const center = h('div', { class: 'center' })
   const right = h('aside', { class: 'rail right', 'aria-label': 'Review queue' })
-  el.append(h('div', { class: 'cols' }, rail, center, right))
+  el.append(h('div', { class: 'cols chart-first' }, rail, center, right))
 
   // filters
   const check = (label: string, on: boolean, cb: (v: boolean) => void) => {
@@ -170,14 +170,15 @@ export function mountScreen(el: HTMLElement, { ds, u }: Ctx) {
         bg.append('rect').attr('x', 0).attr('y', 0).attr('width', xs(0)).attr('height', ys(0)).attr('fill', 'var(--cat-water)').attr('opacity', 0.07)
         bg.append('line').attr('x1', xs(0)).attr('x2', xs(0)).attr('y1', 0).attr('y2', H).attr('stroke', 'var(--dim)')
         bg.append('line').attr('x1', 0).attr('x2', W).attr('y1', ys(0)).attr('y2', ys(0)).attr('stroke', 'var(--dim)')
-        const q = (x: number, y: number, a: string, t1: string, t2: string) => {
-          bg.append('text').attr('x', x).attr('y', y).attr('text-anchor', a).attr('class', 'lbl-mono').attr('fill', 'var(--ink)').text(t1)
-          bg.append('text').attr('x', x).attr('y', y + 15).attr('text-anchor', a).attr('class', 'lbl').text(t2)
+        const narrow = W < 560
+        const q = (x: number, y: number, a: string, t1: string, short: string, t2: string) => {
+          bg.append('text').attr('x', x).attr('y', y).attr('text-anchor', a).attr('class', 'lbl-mono').attr('fill', 'var(--ink)').text(narrow ? short : t1)
+          if (!narrow) bg.append('text').attr('x', x).attr('y', y + 15).attr('text-anchor', a).attr('class', 'lbl').text(t2)
         }
-        q(8, 16, 'start', 'WATER SHUT-OFF CANDIDATES', 'less oil, more water than offsets')
-        q(W - 8, 16, 'end', 'STRONG — WATCH WATER', 'more oil and more water')
-        q(8, H - 20, 'start', 'STIMULATE / LIFT', 'less oil, less water')
-        q(W - 8, H - 20, 'end', 'STARS', 'more oil, less water')
+        q(8, 16, 'start', 'WATER SHUT-OFF CANDIDATES', 'WSO CANDIDATES', 'less oil, more water than offsets')
+        q(W - 8, 16, 'end', 'STRONG — WATCH WATER', 'WATCH WATER', 'more oil and more water')
+        q(8, H - 20, 'start', 'STIMULATE / LIFT', 'STIM / LIFT', 'less oil, less water')
+        q(W - 8, H - 20, 'end', 'STARS', 'STARS', 'more oil, less water')
         bg.append('g').attr('transform', `translate(0,${H})`).call(d3.axisBottom(xs).ticks(6).tickFormat(d3.format('+.1f'))).call(axisStyle)
         bg.append('g').call(d3.axisLeft(ys).ticks(6).tickFormat(d3.format('+.1f'))).call(axisStyle)
         bg.append('text').attr('class', 'lbl').attr('x', W / 2).attr('y', H + 36).attr('text-anchor', 'middle').text('Oil heterogeneity index  →')
