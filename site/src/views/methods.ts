@@ -6,6 +6,10 @@ import { METHODS as FORECAST } from './forecast'
 import { METHODS as NODAL } from './nodal'
 import { METHODS as GASLIFT } from './gaslift'
 import { METHODS as TRANSITION } from './transition'
+import { METHODS as FLOWASSURANCE } from './flowassurance'
+import { METHODS as LIFT } from './lift'
+import { METHODS as NETWORK } from './network'
+import { METHODS as EVENTS } from './events'
 
 const COMMON = `
 <h3>Data</h3>
@@ -75,6 +79,10 @@ ${tableOfTypes()}`,
   nodal: NODAL,
   gaslift: GASLIFT,
   transition: TRANSITION,
+  flowassurance: FLOWASSURANCE,
+  lift: LIFT,
+  network: NETWORK,
+  events: EVENTS,
 }
 
 function tableOfTypes() {

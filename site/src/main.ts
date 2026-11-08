@@ -16,13 +16,19 @@ import { mountForecast } from './views/forecast'
 import { mountNodal } from './views/nodal'
 import { mountGasLift } from './views/gaslift'
 import { mountTransition } from './views/transition'
+import { mountFlowAssurance } from './views/flowassurance'
+import { mountLift } from './views/lift'
+import { mountNetwork } from './views/network'
+import { mountEvents } from './views/events'
 
 export interface Ctx { ds: Dataset; u: ReturnType<typeof units> }
 type Mount = (el: HTMLElement, ctx: Ctx) => (() => void) | void
 
 // group 'review' = the four-stage workflow; 'tools' = supporting engineering modules.
-// `model` pages run on illustrative physics inputs and do not depend on the dataset toggle.
-const VIEWS: Record<Route, { n: string; label: string; mount: Mount; group: 'review' | 'tools'; model?: true }> = {
+// `own` pages do not use the dataset toggle; their banner describes their own inputs instead.
+interface Own { badge: string; real?: true; text: string; src?: [string, string] }
+const MODEL: Own = { badge: 'ILLUSTRATIVE MODEL', text: 'Physics models with adjustable, generic inputs · independent of the dataset toggle' }
+const VIEWS: Record<Route, { n: string; label: string; mount: Mount; group: 'review' | 'tools'; own?: Own }> = {
   screen: { n: '1', label: 'Screen', mount: mountScreen, group: 'review' },
   producer: { n: '2', label: 'Diagnose producer', mount: mountProducer, group: 'review' },
   injector: { n: '2b', label: 'Diagnose injector', mount: mountInjector, group: 'review' },
@@ -31,7 +37,11 @@ const VIEWS: Record<Route, { n: string; label: string; mount: Mount; group: 'rev
   forecast: { n: 'T1', label: 'Decline & forecast', mount: mountForecast, group: 'tools' },
   nodal: { n: 'T2', label: 'Nodal analysis', mount: mountNodal, group: 'tools' },
   gaslift: { n: 'T3', label: 'Gas lift allocation', mount: mountGasLift, group: 'tools' },
-  transition: { n: 'T4', label: 'CO₂ & geothermal', mount: mountTransition, group: 'tools', model: true },
+  transition: { n: 'T4', label: 'CO₂ & geothermal', mount: mountTransition, group: 'tools', own: { ...MODEL, text: MODEL.text + ' · real public injection figures cited for scale' } },
+  flowassurance: { n: 'T5', label: 'Wax & hydrates', mount: mountFlowAssurance, group: 'tools', own: MODEL },
+  lift: { n: 'T6', label: 'Artificial lift', mount: mountLift, group: 'tools', own: MODEL },
+  network: { n: 'T7', label: 'Network', mount: mountNetwork, group: 'tools' },
+  events: { n: 'T8', label: 'Event detection', mount: mountEvents, group: 'tools', own: { badge: 'REAL DATA', real: true, src: ['Petrobras 3W dataset · CC BY 4.0', 'https://github.com/petrobras/3W'], text: 'Petrobras 3W dataset (CC BY 4.0) · real offshore wells with expert-labelled events · independent of the dataset toggle' } },
 }
 
 const app = document.querySelector<HTMLDivElement>('#app')!
@@ -78,9 +88,8 @@ function topbar() {
 }
 
 function banner(ds: Dataset) {
-  if (VIEWS[state.route].model) return h('div', { class: 'banner' },
-    h('span', { class: 'badge synthetic' }, 'ILLUSTRATIVE MODEL'),
-    h('span', {}, 'Physics models with adjustable, generic inputs · independent of the dataset toggle · real public injection figures cited for scale'))
+  const own = VIEWS[state.route].own
+  if (own) return h('div', { class: 'banner' }, h('span', { class: `badge ${own.real ? 'real' : 'synthetic'}` }, own.badge), h('span', {}, own.text))
   return h('div', { class: 'banner' },
     ds.real ? h('span', { class: 'badge real' }, 'REAL DATA') : h('span', { class: 'badge synthetic' }, 'SYNTHETIC DATA'),
     h('span', {}, ds.real
@@ -89,8 +98,10 @@ function banner(ds: Dataset) {
 }
 
 function statusbar(ds: Dataset) {
+  const own = VIEWS[state.route].own
   return h('footer', { class: 'statusbar' },
-    ds.real
+    own ? h('span', {}, 'SRC ', own.src ? h('a', { href: own.src[1], target: '_blank', rel: 'noopener' }, own.src[0]) : 'generic model inputs (see Methods)')
+    : ds.real
       ? h('span', {}, 'SRC ', h('a', { href: ds.url, target: '_blank', rel: 'noopener' }, 'Equinor & Volve licence partners'), ` · ${ds.licence}`)
       : h('span', {}, 'SRC pipeline/fieldx.py · synthetic, seed 42'),
     h('span', {}, 'UNITS ', state.units === 'field' ? 'field (bbl/d, psi)' : 'SI (Sm³/d, bar)'),

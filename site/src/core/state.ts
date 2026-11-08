@@ -1,7 +1,7 @@
 // Tiny observable store. The URL hash mirrors the shareable parts (route, dataset, units, well).
 import type { UnitSystem } from './units'
 
-export type Route = 'screen' | 'producer' | 'injector' | 'evaluate' | 'register' | 'forecast' | 'nodal' | 'gaslift' | 'transition'
+export type Route = 'screen' | 'producer' | 'injector' | 'evaluate' | 'register' | 'forecast' | 'nodal' | 'gaslift' | 'transition' | 'flowassurance' | 'lift' | 'network' | 'events'
 export type DatasetId = 'fieldx' | 'volve'
 export type ScreenView = 'map' | 'hi' | 'pareto' | 'gap' | 'drive'
 
@@ -63,7 +63,7 @@ export function setA(patch: Partial<Assumptions>) { set({ a: { ...state.a, ...pa
 
 export function subscribe(l: Listener) { listeners.add(l); return () => listeners.delete(l) }
 
-const ROUTES: Route[] = ['screen', 'producer', 'injector', 'evaluate', 'register', 'forecast', 'nodal', 'gaslift', 'transition']
+const ROUTES: Route[] = ['screen', 'producer', 'injector', 'evaluate', 'register', 'forecast', 'nodal', 'gaslift', 'transition', 'flowassurance', 'lift', 'network', 'events']
 
 export function readHash() {
   const h = location.hash.replace(/^#\/?/, '')
