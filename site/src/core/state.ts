@@ -1,7 +1,7 @@
 // Tiny observable store. The URL hash mirrors the shareable parts (route, dataset, units, well).
 import type { UnitSystem } from './units'
 
-export type Route = 'screen' | 'producer' | 'injector' | 'evaluate' | 'register'
+export type Route = 'screen' | 'producer' | 'injector' | 'evaluate' | 'register' | 'forecast' | 'nodal' | 'gaslift' | 'transition'
 export type DatasetId = 'fieldx' | 'volve'
 export type ScreenView = 'map' | 'hi' | 'pareto' | 'gap' | 'drive'
 
@@ -63,7 +63,7 @@ export function setA(patch: Partial<Assumptions>) { set({ a: { ...state.a, ...pa
 
 export function subscribe(l: Listener) { listeners.add(l); return () => listeners.delete(l) }
 
-const ROUTES: Route[] = ['screen', 'producer', 'injector', 'evaluate', 'register']
+const ROUTES: Route[] = ['screen', 'producer', 'injector', 'evaluate', 'register', 'forecast', 'nodal', 'gaslift', 'transition']
 
 export function readHash() {
   const h = location.hash.replace(/^#\/?/, '')
@@ -85,7 +85,7 @@ function writeHash() {
   const q = new URLSearchParams()
   q.set('ds', state.ds); q.set('u', state.units)
   if (state.route === 'screen') q.set('v', state.screenView)
-  if (state.route === 'producer' && state.well) q.set('w', state.well)
+  if (['producer', 'forecast', 'nodal'].includes(state.route) && state.well) q.set('w', state.well)
   if (state.route === 'injector' && state.injector) q.set('i', state.injector)
   if ((state.route === 'evaluate' || state.route === 'register') && state.opp) q.set('o', state.opp)
   const next = `#/${state.route}?${q.toString()}`

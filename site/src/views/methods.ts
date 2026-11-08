@@ -2,6 +2,10 @@
 import type { Route } from '../core/state'
 import { OPP_TYPES } from '../analysis/econ'
 import { h } from '../ui/kit'
+import { METHODS as FORECAST } from './forecast'
+import { METHODS as NODAL } from './nodal'
+import { METHODS as GASLIFT } from './gaslift'
+import { METHODS as TRANSITION } from './transition'
 
 const COMMON = `
 <h3>Data</h3>
@@ -67,6 +71,10 @@ ${tableOfTypes()}`,
 <h2>Register</h2>
 <p>Default stages: jobs with rNPV ≤ 0 are <em>Rejected</em>; cheap (≤ $0.3 M), high-confidence (P(s) ≥ 0.85) jobs in the top half are treated as already <em>Executed</em>; the top 35 % by value are <em>Approved</em>, the next 35 % <em>Evaluated</em>, the rest <em>Identified</em>. Change any stage in the table — it is saved in your browser.</p>
 <p>Lookback actuals on Field X are synthetic (deterministic 0.55–1.25 × P50) to show the post-job review step.</p>`,
+  forecast: FORECAST,
+  nodal: NODAL,
+  gaslift: GASLIFT,
+  transition: TRANSITION,
 }
 
 function tableOfTypes() {

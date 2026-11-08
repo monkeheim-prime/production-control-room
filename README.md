@@ -1,4 +1,6 @@
-# Well-by-well review
+# Production control room
+
+Prepared by **Tahah**.
 
 An interactive production-technology workflow — **Screen › Diagnose › Evaluate › Register** —
 built as a static site on real field data (Equinor Volve) and a synthetic 40-well field.
@@ -12,6 +14,15 @@ built as a static site on real field data (Equinor Volve) and a synthetic 40-wel
 | 2b Diagnose injector | Modified Hall plot (integral + derivative), rate-based connectivity, voidage replacement. |
 | 3 Evaluate | Risked gain waterfall, opportunity bubble map, efficient frontier, NPV/payback, budget- and rig-constrained portfolio optimiser. |
 | 4 Register | Stage-gate funnel, editable opportunity register (CSV export), lookback, schedule, printable well one-pager, full-screen review-meeting mode. |
+
+Supporting toolkit:
+
+| Module | What it does |
+|---|---|
+| T1 Decline & forecast | Arps decline fits with P10/P50/P90 bands, a hide-the-last-N-months backtest, and a field-wide backtest scoreboard. |
+| T2 Nodal analysis | IPR (PI + Vogel) against a simplified multiphase VLP, operating point and tubing sensitivity, model-vs-measured BHP check. |
+| T3 Gas lift allocation | Equal-slope allocation of limited lift gas across the Field X gas-lift wells, compared with current and equal-split allocations. |
+| T4 CO₂ & geothermal | Illustrative CO₂ injection well (Peng–Robinson, phase envelope, Joule–Thomson cooling, hydrate risk) and a geothermal producer with lithium co-production. |
 
 The **Methods** drawer on every page lists the equations, rules and assumptions.
 

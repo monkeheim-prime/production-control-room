@@ -63,6 +63,10 @@ button { cursor: pointer; }
   display: flex; gap: 6px; align-items: center; min-height: 36px;
 }
 .stages a .n { font-family: var(--mono); font-size: 11px; }
+.stages .group { font-family: var(--mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); align-self: center; padding: 0 2px 0 8px; white-space: nowrap; }
+.stages .group:first-child { padding-left: 0; }
+.brand .byline { display: block; font-weight: 400; letter-spacing: .04em; font-size: 11px; color: var(--muted); margin-top: 1px; }
+.statusbar .credit { color: var(--ink-2); }
 .stages a[aria-current="page"] { border-color: var(--ink); background: var(--panel-3); color: var(--ink-strong); }
 .spacer { flex: 1 1 auto; }
 .seg { display: inline-flex; border: 1px solid var(--line); }

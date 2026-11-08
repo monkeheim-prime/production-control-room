@@ -7,6 +7,7 @@ import { MECH_LABEL, review, type Opportunity } from '../analysis/diagnose'
 import { CAT_COLOR, CAT_LABEL, type Cat } from '../analysis/econ'
 import { axisStyle, drawIn, dur, h, responsive } from '../ui/kit'
 import { stageOf } from './register'
+import { AUTHOR } from '../core/credit'
 
 export function openPresent({ ds, u }: Ctx) {
   const rv = review(ds, state.a)
@@ -19,7 +20,7 @@ export function openPresent({ ds, u }: Ctx) {
 
   const slides: (() => HTMLElement)[] = [
     () => h('div', { class: 'slide' },
-      h('span', { class: 'eyebrow' }, `${ds.label} · well-by-well review`),
+      h('span', { class: 'eyebrow' }, `${ds.label} · well-by-well review · prepared by ${AUTHOR}`),
       h('h1', {}, `${focus.length} interventions worth +${fmt(u.liq(d3.sum(focus, o => o.gain * o.ps)))} ${u.liqU} risked`),
       h('div', { class: 'kpis', style: { gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', maxWidth: '980px' } },
         big('Wells reviewed', String(ds.wells.length)), big('Wells with an issue', String(issues)),
@@ -84,7 +85,7 @@ export function openPresent({ ds, u }: Ctx) {
   const root = h('div', { class: 'present', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Review meeting' },
     stage,
     h('div', { class: 'foot' },
-      h('button', { class: 'btn ghost', onclick: () => close() }, 'Esc  close'), counter,
+      h('button', { class: 'btn ghost', onclick: () => close() }, 'Esc  close'), h('span', {}, counter, ` · prepared by ${AUTHOR}`),
       h('div', { style: { display: 'flex', gap: '8px' } },
         h('button', { class: 'btn', 'aria-label': 'Previous slide', onclick: () => show(i - 1) }, '←'),
         h('button', { class: 'btn primary', 'aria-label': 'Next slide', onclick: () => show(i + 1) }, '→'))))

@@ -6,6 +6,7 @@ import { go, set, state } from '../core/state'
 import { ev, fmt, money, pct } from '../core/units'
 import { defaultStage, MECH_LABEL, review, STAGES, type Opportunity, type Stage } from '../analysis/diagnose'
 import { CAT_COLOR, CAT_LABEL } from '../analysis/econ'
+import { AUTHOR } from '../core/credit'
 import { axisStyle, download, dur, h, panel, reduced, responsive, tip, tipRows } from '../ui/kit'
 
 export function stageOf(ds: Dataset, opps: Opportunity[], o: Opportunity): Stage {
@@ -109,7 +110,8 @@ export function mountRegister(el: HTMLElement, ctx: Ctx) {
           row('Cost / risk', `${money(o.cost)} · P(s) ${pct(o.ps)} · ${o.riskText}`),
           row('Pre-job data', o.preJob.map(p => p.split(' — ')[0]).join('; ') || 'none')),
         h('div', { class: 'mono small', style: { borderTop: '1px solid var(--line)', paddingTop: '8px' } },
-          `Recommendation: ${o.e.rnpv > 0 ? 'GO' : 'NO-GO'} · ${CAT_LABEL[o.cat]}`)),
+          `Recommendation: ${o.e.rnpv > 0 ? 'GO' : 'NO-GO'} · ${CAT_LABEL[o.cat]}`),
+        h('div', { class: 'small muted' }, `Prepared by ${AUTHOR}`)),
       h('button', { class: 'btn no-print', onclick: () => go(o.mech === 'inj' ? 'injector' : 'producer', o.mech === 'inj' ? { injector: o.well } : { well: o.well }) }, 'Open diagnosis'),
       h('div', { class: 'small muted no-print' }, 'Use ▶ Present in the top bar for a full-screen review meeting that steps through the approved jobs.'))
     destroyers.push(sparkline(spark, ds, w, u))
